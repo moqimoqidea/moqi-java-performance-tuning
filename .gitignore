@@ -1,0 +1,15 @@
+.idea
+target
+*.DS_Store
+*.iml
+*.svg
+
+.gradle
+build
+
+.java-version
+
+src/main/resources/image
+
+# vs code
+bin
