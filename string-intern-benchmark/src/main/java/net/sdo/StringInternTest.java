@@ -58,57 +58,57 @@ public class StringInternTest {
     boolean cacheHit100;
 
     private String[] strings;
-    private ConcurrentHashMap<String,String> smap;
-    private CustomConcurrentHashMap<String,String> wmap;
+    private ConcurrentHashMap<String, String> smap;
+    private CustomConcurrentHashMap<String, String> wmap;
 
     @Setup(Level.Trial)
     public void setupGlobal() {
-	smap = new ConcurrentHashMap<>();
-	wmap = new CustomConcurrentHashMap<>(
-			CustomConcurrentHashMap.WEAK,
-			CustomConcurrentHashMap.EQUALS,
-			CustomConcurrentHashMap.WEAK,
-			CustomConcurrentHashMap.EQUALS,
-			60013);
+        smap = new ConcurrentHashMap<>();
+        wmap = new CustomConcurrentHashMap<>(
+                CustomConcurrentHashMap.WEAK,
+                CustomConcurrentHashMap.EQUALS,
+                CustomConcurrentHashMap.WEAK,
+                CustomConcurrentHashMap.EQUALS,
+                60013);
     }
 
     @Setup(Level.Iteration)
     public void setup() {
-	if (cacheHit100) {
-	    strings = new String[nStrings];
-	    for (int i = 0; i < nStrings; i++) {
-	        strings[i] = makeRandomString();
-	    }
-	}
+        if (cacheHit100) {
+            strings = new String[nStrings];
+            for (int i = 0; i < nStrings; i++) {
+                strings[i] = makeRandomString();
+            }
+        }
     }
 
     @Benchmark
     public void testIntern(Blackhole bh) {
-	for (int i = 0; i < nStrings; i++) {
-	    String t = (cacheHit100) ? strings[i].intern() : makeRandomString();
-	    bh.consume(t);
-	}
+        for (int i = 0; i < nStrings; i++) {
+            String t = (cacheHit100) ? strings[i].intern() : makeRandomString();
+            bh.consume(t);
+        }
     }
 
     @Benchmark
     public void testStrongMap(Blackhole bh) {
-	for (int i = 0; i < nStrings; i++) {
-	    String t = (cacheHit100) ? strings[i].intern() : makeRandomString();
-	    t = smap.putIfAbsent(t, t);
-	    bh.consume(t);
-	}
+        for (int i = 0; i < nStrings; i++) {
+            String t = (cacheHit100) ? strings[i].intern() : makeRandomString();
+            t = smap.putIfAbsent(t, t);
+            bh.consume(t);
+        }
     }
 
     @Benchmark
     public void testWeakMap(Blackhole bh) {
-	for (int i = 0; i < nStrings; i++) {
-	    String t = (cacheHit100) ? strings[i].intern() : makeRandomString();
-	    t = wmap.putIfAbsent(t, t);
-	    bh.consume(t);
-	}
+        for (int i = 0; i < nStrings; i++) {
+            String t = (cacheHit100) ? strings[i].intern() : makeRandomString();
+            t = wmap.putIfAbsent(t, t);
+            bh.consume(t);
+        }
     }
 
     private String makeRandomString() {
-	return RandomStringUtils.randomAscii(5, 256);
+        return RandomStringUtils.randomAscii(5, 256);
     }
 }
