@@ -1,3 +1,9 @@
 # moqi-java-performance-tuning
 
-## string-intern-benchmark
+## Plugin
+
+[Intellij IDEA plugin for Java Microbenchmark Harness (JMH)](https://github.com/artyushov/idea-jmh-plugin)
+
+## Roadmap
+
+### string-intern-benchmark
